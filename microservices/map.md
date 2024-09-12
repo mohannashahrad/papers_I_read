@@ -1,3 +1,5 @@
+[this whole document should be updated with the latest readings over the weekend!]
+
 ## Benchmark Suits for microbenchmarks
 1. DeathStarBench
 2. uSuite
@@ -14,17 +16,3 @@
 5. Autotuning framework for microservice concurrency [Auto-tuned threading for OLDI microservice]
 6. GrandSLAm -> spedifically focuses on ML microservices / improves the resources utilization by estimating the execution time of each tier, and dynamically batching and reordering requests to meet QoS.
 
-## QoS monitoring of microservices
-### Reactive Microservice Management Methods
-
-#### Heuristic Methods
-#### ML methods
-
-### Proactive Microservice Management Methods
-
-## Resource Management for cloud systems in general
-1. 
-
-
-
--  uTune -> auto-tunes the threading model of multi-tier applications to improve their end-to-end performance
