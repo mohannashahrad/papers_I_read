@@ -66,3 +66,68 @@ diagrams and use custom versions of the same architectural components or open-so
 - overall, they found that more detailed quantitative comparisons is impossible due to divergent (or ill-specified) definitions in previous studies and because different studies use custom measurement techniques specific to their observability
 frameworks. 
 - There is a need to develop rich, well-accepted methodologies for collecting data about microservice architectures to systematize similarities and differences across them. [like IMC]
+
+---------------------------------------------------------
+
+Notes from their presentation:
+
+Curent State of micro-service research:
+- Microservice testbeds [DeathStarBench + train ticket] -> Small in scale and complexity
+- Tools evaluated on these testbeds
+   - Focus on topology and request flows
+   - Example: Sage -> resource management using topological information
+   - Example: TProf -> Aggregate analysis of request workflows
+
+- the question here is that "How relaistics are the test beds and the abstractions that we assume on microservices?"
+
+The summary of their findings: 
+![](./figures/meta_analysis.png)
+
+Their analysis granularity -> service_id [a unique name for each service]
+
+
+The following figure shows that there is a high fluctuation in the number of microservices deployed at Meta in a 22 month period. [but then turned out 60% of the ids were of the same format inference_platform+[some random string] where X was constant] -> basically each service_id was for a different model, tenant info is included in the service_id to utilize infrastructure support. (they want scalability for each of their models seperately) 
+![](./figures/meta_serviceId.png)
+Takeaway from this: service granularity is not sufficiant for all management tasks: at least multi-tenancy and data placement must be considered.
+
+There is also some amount of daily churn [the services getting created and deprecated in a short time]. Most of the deprecations over the time was from "inference_platform". (models getting created as a service and then shortly after getting removed)
+![](./figures/meta_churn.png)
+
+There also seems to be a growing number of services getting deployed at meta [and these are new services with new functionalities and not due to scaling the existing services]
+
+Meta's distributed tracing framework -> Canopy [SOSP'17 ]
+- tracing has blocks [execution time of a portion of the worfklow / functions] and points [which are specific points in time that are connected to each other via edges]
+![](./figures/meta_canopy.png)
+
+then they look at the workflow properties [request trajectories]. Here is what they are looking at assuming each pair of caller/callee (parent/child). 
+![](./figures/meta_workflow.png)
+
+Now the question is: "Can we predict the number of children?" -> Knowing how many microservices (and maybe which) are going to be executed after a request is recieved in a single microservice. -> the majority of services make few calls [shallow ]
+![](./figures/meta_predict_child.png)
+
+Then looking deeper into the number of relays of each parent node in three traces, here is the variability of them:
+![](./figures/meta_relays.png)
+
+- Variation in the number of relays could be due to: 
+1. Different children sets [different higher level behaviours] -> when there are clusters of invocations around the same number of calls (y-axis)
+2. when there is no clusters and a lot of variations in the number calls [those long bars in the plot] -> due to database accesses, data is sharded in different database instances, and the number of calls you're making depends on which data is stored where [potentially an interesting behaviour to look into]
+
+Another analysis they did was "predicting concurrency rates of variable relays" 
+![](./figures/meta_concurrency.png)
+Here the x-axis is the 5 most common services in Ads, and then the invocations for each of them are being shown. The x_axis is the concurrency rate (0 means all children were sequential, and 1 means all children was concurrent)
+- again we see for some of the services, the concurrency rates are clustered and for some it's highly variable.
+
+The analysis on the plot is as below: 
+![](./figures/meta_concurrency2.png)
+
+Takeaway -> Children set provide visibility into code logic, explaining dependencies.
+
+Implications of their findings:
+1. Testbeds shoud be extended to support for 
+- Heterogeneity of services, churn 
+- variable concurrency, number of children, and children sets 
+
+2. Tooling that uses topology for resource management -> should be able to adapt to highly dynamic topology [even in a daily basis]
+
+3. Tooling that uses workflows for performance prediction, diagnosis, capacity planning 
+-> should assume significant diversity in workflows
