@@ -46,4 +46,5 @@ mostly stateless, and leverage in-memory primitives to pass data between depende
 37. In general, the more complex an application’s microservices graph, the more impactful slow servers [on which they're running] are, as the probability that a service on the critical path will be degraded increases.
 
 
----
+A summary of the main things they analyzed in their work:
+![](./figures/deathStarBench.png)
