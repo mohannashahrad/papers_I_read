@@ -18,7 +18,6 @@
 ##  Third-Party Integration Services
 - Communication with third-party vendors or external APIs
 - integration logic like retries and error handling for external requests
-
 ## Orchestrator / Coordination Services
 - coordinate complex workflows or long-running transactions that involve multiple microservices.
 - Orchestrating calls to multiple services

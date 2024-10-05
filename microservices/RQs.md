@@ -1,5 +1,5 @@
-1. What type of microservices usually becomes hot-spots? 
-2. Are there different types of hot-spots? 
-3. 
-4. How does application awareness helps us to run the service more efficiently both for the user and also the cloud provider?
+1. From a high level, can we do aclassification of microservices based on their role (including charactristics and behaviour in performance)? 
+2. What type of microservices usually becomes hot-spots? Are hot-spots different under different workloads? 
+3. What are the challenges of auto-scaling the hotspots? 
+4. Why some simple stateless services are not just libraries? Do we really need all seperate services and paying for the extra communication between them? Can we abstract away the notopn of service seperation from the end-user, but treat some microservices as libraries accessible to other nodes?
 
